@@ -99,7 +99,7 @@ button:disabled { cursor: not-allowed; opacity: .7; }
 .panel-empty-note { margin: 18px 10px 0; display: flex; gap: 8px; color: #788294; font-size: 12px; }
 
 .center-column { position: relative; min-width: 0; display: grid; grid-template-rows: 1fr 58px; overflow: hidden; }
-.map-stage { position: relative; overflow: hidden; background: #1b211b; }
+.map-stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; background: #1b211b; }
 .satellite-canvas { position: absolute; inset: 0; overflow: hidden; transform: scale(calc(.96 + var(--zoom) / 120)); transform-origin: center; background:
   linear-gradient(32deg, rgba(252,214,100,.95) 0 1px, transparent 2px) 62% 20% / 420px 420px,
   linear-gradient(102deg, rgba(255,255,255,.82) 0 2px, transparent 3px) 46% 45% / 310px 270px,

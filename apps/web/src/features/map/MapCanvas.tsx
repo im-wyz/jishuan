@@ -72,6 +72,8 @@ export function MapCanvas({ view }: MapCanvasProps) {
   const setMapView = useWorkbenchStore((state) => state.setMapView);
   const togglePanel = useWorkbenchStore((state) => state.togglePanel);
   const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string | undefined;
+  const collapsedLeft = useWorkbenchStore((state) => state.collapsedLeft);
+  const collapsedRight = useWorkbenchStore((state) => state.collapsedRight);
 
   const center = useMemo<mapboxgl.LngLatLike>(() => [view.center[0], view.center[1]], [view.center]);
 
@@ -126,6 +128,29 @@ export function MapCanvas({ view }: MapCanvasProps) {
       mapRef.current = null;
     };
   }, [setMapView, token]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const container = containerRef.current;
+    if (!map || !container) {
+      return;
+    }
+
+    const resizeNow = () => map.resize();
+    resizeNow();
+    const firstFrame = window.requestAnimationFrame(resizeNow);
+    const secondFrame = window.requestAnimationFrame(() => window.requestAnimationFrame(resizeNow));
+    const timeout = window.setTimeout(resizeNow, 260);
+    const observer = new ResizeObserver(resizeNow);
+    observer.observe(container);
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+      window.clearTimeout(timeout);
+      observer.disconnect();
+    };
+  }, [collapsedLeft, collapsedRight]);
 
   useEffect(() => {
     const map = mapRef.current;
